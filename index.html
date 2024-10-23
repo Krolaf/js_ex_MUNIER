@@ -4,6 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    
+    <style>
+        form {
+            width: 300px;
+            margin: 0 auto;
+        }
+        label, input {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        input[type="submit"] {
+            width: auto;
+            padding: 5px 10px;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 <body>
 
@@ -15,13 +35,39 @@
     <br>
 
     <div class="container" style="background-color: black;">
-        <div class="row" style="background-color: blue;">
+        <div class="row" style="background-color: aqua;">
             <div class="col">1</div>
             <div class="col">2</div>
             <div class="col">3</div>
             <div class="col">4</div>
         </div>
     </div>
+
+    <h2>Création de Compte</h2>
+
+    <form id="signupForm">
+        <label for="nom">Nom:</label>
+        <input type="text" id="nom" name="nom">
+
+        <label for="prenom">Prénom:</label>
+        <input type="text" id="prenom" name="prenom">
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
+
+        <label for="pseudo">Pseudo:</label>
+        <input type="text" id="pseudo" name="pseudo">
+
+        <label for="password">Mot de passe:</label>
+        <input type="password" id="password" name="password">
+
+        <label for="confirmPassword">Confirmer le mot de passe:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword">
+
+        <input type="submit" value="S'inscrire">
+
+        <p class="error" id="error"></p>
+    </form>
 
     <script>
         let input = document.getElementById("inputText");
@@ -35,9 +81,62 @@
         let divs = document.getElementsByClassName("col");
 
      
-        for (let i = 0; i < divs.length && i < etudiants.length; i++) {
+        for (let i = 0; i < etudiants.length; i++) {
             divs[i].innerHTML = etudiants[i];
         }
+
+
+            const form = document.getElementById('signupForm');
+            const errorElement = document.getElementById('error');
+
+            form.addEventListener('submit', (event) => {
+            errorElement.textContent = '';
+            
+            const nom = document.getElementById('nom').value.trim();
+            const prenom = document.getElementById('prenom').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const pseudo = document.getElementById('pseudo').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            let messages = [];
+
+            if (nom === '') {
+                messages.push('Le nom est requis.');
+            }
+            if (prenom === '') {
+                messages.push('Le prénom est requis.');
+            }
+            if (email === '') {
+                messages.push('L\'email est requis.');
+            } else if (!validateEmail(email)) {
+                messages.push('L\'email est invalide.');
+            }
+            if (pseudo === '') {
+                messages.push('Le pseudo est requis.');
+            }
+            if (password === '') {
+                messages.push('Le mot de passe est requis.');
+            } else if (password.length < 6) {
+                messages.push('Le mot de passe doit contenir au moins 6 caractères.');
+            }
+            if (confirmPassword === '') {
+                messages.push('La confirmation du mot de passe est requise.');
+            } else if (password !== confirmPassword) {
+                messages.push('Les mots de passe ne correspondent pas.');
+            }
+
+            if (messages.length > 0) {
+                event.preventDefault();  
+                errorElement.textContent = messages.join(', ');
+            }
+        });
+
+        function validateEmail(email) {
+            const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return re.test(String(email).toLowerCase());
+        }
+
 
     </script>
 
